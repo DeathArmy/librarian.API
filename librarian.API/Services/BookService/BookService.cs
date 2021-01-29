@@ -40,6 +40,8 @@ namespace librarian.API.Services.BookService
             ServiceResponse<string> serviceResponse = new ServiceResponse<string>();
             try
             {
+                var entity2 = _context.UserBooks.First(b => b.BookId == id);
+                _context.Remove(entity2);
                 var entity = _context.Books.FirstOrDefault(b => b.Id == id);
                 _context.Remove(entity);
                 _context.SaveChanges();
@@ -58,7 +60,7 @@ namespace librarian.API.Services.BookService
             ServiceResponse<GetBookDto> serviceResponse = new ServiceResponse<GetBookDto>();
             try
             {
-                serviceResponse.Data = _mapper.Map<GetBookDto>(_context.Books.FirstOrDefault(b => b.Id == id));
+                serviceResponse.Data = _mapper.Map<GetBookDto>(_context.Books.First(b => b.Id == id));
             }
             catch (Exception ex)
             {

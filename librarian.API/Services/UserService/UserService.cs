@@ -60,7 +60,7 @@ namespace librarian.API.Services.UserService
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message += (ex.InnerException != null) ? ex.InnerException.Message : ex.Message;
-                if (serviceResponse.Message == "") serviceResponse.Message = "Wrong username or password.\n";
+                if (serviceResponse.Message == "") serviceResponse.Message = "Niepoprawny login lub hasło.";
             }
             return serviceResponse;
         }
@@ -114,7 +114,9 @@ namespace librarian.API.Services.UserService
             ServiceResponse<List<PlainUserBookDto>> serviceResponse = new ServiceResponse<List<PlainUserBookDto>>();
             try
             {
-                var currentUserBookList = _context.UserBooks.Where(ub => ub.UserId == ubList[0].UserId).ToList();
+                var currentUserBookList = _context.UserBooks
+                    .Where(ub => ub.UserId == ubList[0].UserId)
+                    .ToList();
                 _context.UserBooks.RemoveRange(currentUserBookList);
                 foreach(var userbook in ubList)
                 {
@@ -122,7 +124,10 @@ namespace librarian.API.Services.UserService
                 }
                 _context.SaveChanges();
 
-                serviceResponse.Data = _context.UserBooks.Where(ub => ub.UserId == ubList[0].UserId).Select(ub => _mapper.Map<PlainUserBookDto>(ub)).ToList();               
+                serviceResponse.Data = _context.UserBooks
+                    .Where(ub => ub.UserId == ubList[0].UserId)
+                    .Select(ub => _mapper.Map<PlainUserBookDto>(ub))
+                    .ToList();               
             }
             catch (Exception ex)
             {
